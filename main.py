@@ -56,10 +56,8 @@ def displayIntro():
 
 def chooseLetterWord():
 
-    letterIndex = random.randint(0, 25)
-    startingLetter = list(words_dict.keys())[letterIndex]
-    wordIndex =  random.randint(0, len(words_dict[startingLetter])-1)
-    word = words_dict[startingLetter][wordIndex]
+    startingLetter = random.choice(list(words_dict.keys()))
+    word = random.choice(words_dict[startingLetter])
 
     return startingLetter, word
 
