@@ -29,7 +29,7 @@ def chooseCategory(dict_name):
 def chooseLetterWord(chosenCategory):
 
     # catch keys that are not available
-    
+
 
     letterIndex = random.randint(0, len(chosenCategory)-1)
     startingLetter = list(chosenCategory.keys())[letterIndex]
@@ -57,9 +57,6 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
         print(f"I spy with my little eye an object that begins with the letter {secretLetter}")
 
     print()
-    print("Please write the word in lower case characters")
-    print()
-    
 
     userGuesses = 0
 
