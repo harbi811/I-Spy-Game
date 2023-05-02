@@ -3,9 +3,6 @@
 # import modules
 import play
 import time
-import importlib
-import random
-import dictionaries
 
 def displayIntro():
 

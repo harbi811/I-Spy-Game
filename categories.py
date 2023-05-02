@@ -1,9 +1,8 @@
 
-class Dictionaries:
+class Categories:
     def __init__(self):
-        pass
 
-    def animals(self):
+    # animals
         self.animals = {'a': ['aardvark', 'antelope', 'alpaca', 'anaconda', 'anteater'],
                         'b': ['bear', 'buffalo', 'bat', 'beaver', 'baboon'],
                         'c': ['cat', 'crocodile', 'chimpanzee', 'camel', 'crab','cockroach','capybara'],
@@ -31,10 +30,9 @@ class Dictionaries:
                         'y': ['yak', 'yabby', 'yellowjacket', 'yaksha', 'yeti'],
                         'z': ['zebra', 'zorilla', 'zebu', 'zeedonk']
                     }
-        return self.animals
 
-    # towns or capitals
-    def places(self):
+
+        # cities or places
         self.places = {'a': ['amsterdam', 'ankara', 'adelaide', 'athens'],
                         'b': ['brasilia', 'berlin', 'bangkok', 'budapest', 'buenos aires'],
                         'c': ['canberra', 'copenhagen', 'cape town', 'caracas', 'chicago'],
@@ -62,11 +60,10 @@ class Dictionaries:
                         'y': ['yangon', 'yerevan', 'yaoundé', 'yogyakarta', 'yakutsk'],
                         'z': ['zagreb', 'zurich', 'zaragoza', 'zamboanga', 'zanzibar']
                     }
-        return self.places
 
 
-    # fruits
-    def fruits(self):
+
+        # fruits
         self.fruits = {'a': ['apple', 'apricot', 'avocado', 'ackee', 'acai', 'abiu', 'ambarella'],
                     'b': ['banana', 'blackberry', 'blueberry', 'boysenberry', 'bilberry'],
                         'c': ['cherry', 'coconut', 'clementine', 'cantaloupe', 'cranberry'],
@@ -91,10 +88,9 @@ class Dictionaries:
                         'y': ['yuca', 'yumberry', 'yuzu'],
                         'z': ['zucchini', 'zante currants', 'zabaiion', 'zalacca', 'ziziphus mauritiana']
                     }
-        return self.fruits
-    
-    # random
-    def expert(self):
+
+
+        # random
         self.expert = {'a': ['apple', 'ant', 'airplane', 'apricot', 'alligator', 'acorn', 'arrow'],
                     'b': ['ball', 'banana', 'book', 'bee', 'butterfly', 'bread'],
                         'c': ['cat', 'cup', 'car', 'cake', 'camel', 'candy', 'candle'],
@@ -122,4 +118,4 @@ class Dictionaries:
                         'y': ['yellow', 'yoyo', 'yacht', 'yak', 'yawn', 'yogurt', 'yo-yo'],
                         'z': ['zebra', 'zoo', 'zealot', 'zipper', 'zucchini', 'zeppelin', 'zero', 'zesty']
                         }
-        return self.expert
+

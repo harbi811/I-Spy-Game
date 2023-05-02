@@ -1,40 +1,32 @@
-import importlib
 import time
-import random #in a module, where are all packages imported
+import random
+from categories import Categories
 
 # import word category when specified by the user
 # user chooses to play fruits, animal or places or random_words
-def chooseCategory(dict_name):
+
+def chooseCategory(dict_name):   
     try:
-        module = importlib.import_module("dictionaries")
-
-        # create instance of class
-        dicts = module.Dictionaries()
-
-        # get reference to method and call the method
-        dict_method = getattr(dicts, dict_name)
-        chosenCategory = dict_method()
         
-        print(f"Successfully imported {dict_name} category")
-        print(type(module))
-        return chosenCategory
-    
-    except ImportError:
+        cat_dicts = vars(Categories())
+        chosenCategory = cat_dicts[dict_name]
+        
+    except KeyError:
         print(f"I am sorry, {dict_name} is not available")
         return None
 
+    else:    
+        print(f"Successfully imported {dict_name} category")
+        return chosenCategory
+    
 
 # choose letter and word from chosen user_category
-
 def chooseLetterWord(chosenCategory):
 
-    # catch keys that are not available
+    # catch keys that are not available. Check issue 
 
-
-    letterIndex = random.randint(0, len(chosenCategory)-1)
-    startingLetter = list(chosenCategory.keys())[letterIndex]
-    wordIndex =  random.randint(0, len(chosenCategory[startingLetter])-1)
-    word = chosenCategory[startingLetter][wordIndex]
+    startingLetter = random.choice(list(chosenCategory.keys()))
+    word = random.choice(chosenCategory[startingLetter])
 
     return startingLetter, word
 

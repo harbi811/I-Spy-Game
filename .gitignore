@@ -4,8 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # game files
-test.py
-
+sandbox.py
+^\.[^g]* 
 
 # User-specific files
 *.rsuser
