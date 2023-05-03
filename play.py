@@ -21,9 +21,7 @@ def chooseCategory(dict_name):
     
 
 # choose letter and word from chosen user_category
-def chooseLetterWord(chosenCategory):
-
-    # catch keys that are not available. Check issue 
+def chooseLetterWord(chosenCategory): 
 
     startingLetter = random.choice(list(chosenCategory.keys()))
     word = random.choice(chosenCategory[startingLetter])
@@ -83,7 +81,7 @@ def userPlay(dict_name, chosenCategory):
     print('Please type "yes / y" or "no / n" to my guesses')
 
     if dict_name in ["fruits", "animals", "places"]:
-        print(f"It is your turn to play, Please type in the first letter of your secret {dict_name}")
+        print(f"It is your turn to play, Please type in the first letter of your secret {dict_name}(s)")
     elif dict_name == "expert":
         print("It is your turn to play, Please type in the first letter of your secret word")
 
@@ -91,50 +89,76 @@ def userPlay(dict_name, chosenCategory):
 
     userWords =[]
 
-    userStartingLetter = input()
     computerGuesses = 0
-    words_available = chosenCategory[userStartingLetter] + userWords # improve so that computer can use words previously guessed by user
+    unavailableKey = 0
 
-    while computerGuesses <= 5:
+    # catch letters/keys that are not available in dictionary
+    keys_available = list(chosenCategory.keys())
+  
 
-        computerGuesses += 1
-
-        usedWords = []
-
-
-        wordGuess = None
-
-        while wordGuess not in  usedWords:
-            wordGuessIndex = random.randint(0, len(words_available)-1) # improve so that a previously guessed word is not returned, sample without replacement
-            wordGuess = words_available[wordGuessIndex]
-            usedWords.append(wordGuess)
-
-        else:
-            new_words_available = list(set(words_available) - set(usedWords))
-            # new_words_available = [words_available[i] for i in availableIndices]
-
-            wordGuessIndex = random.randint(0, len(new_words_available)-1) # think about situations where you are out of words, what happens?
-            wordGuess = new_words_available[wordGuessIndex]
-            usedWords.append(wordGuess)
-
-
-        print('Is your secret word ' + str(wordGuess) + ' ?')
-        time.sleep(2)
+    while unavailableKey <= 3:
+        userStartingLetter = input("Enter first letter of your word:  ").lower()
         
-        userResponse  = input()  # rename this variable
+        if userStartingLetter in keys_available:
+            words_available = chosenCategory[userStartingLetter] + userWords # improve so that computer can use words previously guessed by user
 
-        if userResponse == "yes" or userResponse == 'y':
-            print("Hooray, I made the right guess in " + str(computerGuesses) + " attempt(s)") # do you want to refine this for number of attempts?
-            
+            while computerGuesses <= 5:
+
+                computerGuesses += 1
+
+                usedWords = []
+
+
+                wordGuess = None
+
+                while wordGuess not in  usedWords:
+                    wordGuessIndex = random.randint(0, len(words_available)-1) # improve so that a previously guessed word is not returned, sample without replacement
+                    wordGuess = words_available[wordGuessIndex]
+                    usedWords.append(wordGuess)
+
+                else:
+                    new_words_available = list(set(words_available) - set(usedWords))
+                    # new_words_available = [words_available[i] for i in availableIndices]
+
+                    wordGuessIndex = random.randint(0, len(new_words_available)-1) # think about situations where you are out of words, what happens?
+                    wordGuess = new_words_available[wordGuessIndex]
+                    usedWords.append(wordGuess)
+
+
+                print('Is your secret word ' + str(wordGuess) + ' ?')
+                time.sleep(2)
+                
+                userResponse  = input()  # rename this variable
+
+                if userResponse == "yes" or userResponse == 'y':
+                    print("Hooray, I made the right guess in " + str(computerGuesses) + " attempt(s)") # do you want to refine this for number of attempts?
+                    
+
+                    break
+                elif userResponse == "no" or userResponse == "n":
+                    pass
+
+            else:
+                print("Apologies, I am unable to guess your word")
+                time.sleep(2)
+                print("What was your word?")
+                userWord = input()
+                print("")
+                userWords.append(userWord)
 
             break
-        elif userResponse == "no" or userResponse == "n":
-            pass
+        else:
+            unavailableKey +=1
+
+            print()
+            print(f"Please choose another letter. My database of {dict_name} does not have words that begin {userStartingLetter}")
+            print("Please choose another letter")
 
     else:
-        print("Apologies, I am unable to guess your word")
-        time.sleep(2)
-        print("What was your word?")
-        userWord = input()
-        print("")
-        userWords.append(userWord)
+        print("You have entered the incorrect letter too many times")
+
+
+
+
+
+

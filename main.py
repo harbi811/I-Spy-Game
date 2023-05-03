@@ -31,7 +31,8 @@ while playAgain == 'yes' or playAgain == 'y':
     dict_name = input().lower()
 
     chosenCategory = play.chooseCategory(dict_name)
-    
+
+
     # generate secret letter
     secretLetter, secretWord = play.chooseLetterWord(chosenCategory)
 
@@ -39,6 +40,7 @@ while playAgain == 'yes' or playAgain == 'y':
 
     # computer continues to play the same category
     play.userPlay(dict_name, chosenCategory)
+    
     print()
     print('Do you want to play again? (yes or no)')
     print()
