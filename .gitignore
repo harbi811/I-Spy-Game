@@ -5,7 +5,7 @@
 
 # game files
 sandbox.py
-^\.[^g]* 
+^\.[^g].* 
 
 # User-specific files
 *.rsuser
