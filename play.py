@@ -49,8 +49,9 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
     print()
 
     userGuesses = 0
+    clues = 2
 
-    while userGuesses <= 5:
+    while userGuesses <= 5: # or playerInput == secretWord:
         
         playerInput = input()
         
@@ -59,13 +60,21 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
         # test first letter of user input
         if playerInput[0] == secretLetter:
 
-            if playerInput == secretWord: # improve so that 'computer' does not reuse the previous word
-                print("Yes, you are correct")
-                break
-            else:
+            # # provide clues to the play after 2 fails
+            while playerInput != secretWord:
                 print("No, please try again")
                 print()
+                
+                if clues <=5:
+                    print(f"The first letters of my word are {secretWord[:clues]}")
+                    clues += 1
 
+                    if clues > 4:
+                        print(f"My word also ends with {secretWord[-1]}")
+                break
+            else:
+                print("Yes, you are correct")
+                break
         else:
             print("Your word must begin with ", secretLetter)
     else:
