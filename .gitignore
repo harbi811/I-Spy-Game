@@ -6,6 +6,7 @@
 # game files
 sandbox.py
 ^\.[^g].* 
+.idea/*
 
 # User-specific files
 *.rsuser
