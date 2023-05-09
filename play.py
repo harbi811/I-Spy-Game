@@ -39,13 +39,9 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
 
     # get user input
     print()
-    if dict_name == "fruits":
-        print(f"I spy with my little eye a fruit that begins with the letter {secretLetter}")
-    elif dict_name == "animals":
-        print(f"I spy with my little eye an animal that begins with the letter {secretLetter}")
-    elif dict_name == "places":
-        print(f"I spy with my little eye a place that begins with the letter {secretLetter}")
-    elif dict_name == "expert":
+    if dict_name is not "expert":
+        print(f"I spy with my little eye a {dict_name[:-1]} that begins with the letter {secretLetter}")
+    else:
         print(f"I spy with my little eye an object that begins with the letter {secretLetter}")
 
     print()
@@ -82,10 +78,7 @@ def userPlay(dict_name, chosenCategory):
     print()
     print('Please type "yes / y" or "no / n" to my guesses')
 
-    if dict_name in ["fruits", "animals", "places"]:
-        print(f"It is your turn to play, Please type in the first letter of your secret {dict_name}")
-    elif dict_name == "expert":
-        print("It is your turn to play, Please type in the first letter of your secret word")
+    print(f"It is your turn to play, Please type the first letter of your secret word")
 
     print()
 

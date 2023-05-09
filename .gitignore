@@ -5,7 +5,10 @@
 
 # game files
 sandbox.py
-^\.[^g]* 
+^\.[^g].* 
+
+# ignore all pycharm config
+.idea/*
 
 # User-specific files
 *.rsuser
