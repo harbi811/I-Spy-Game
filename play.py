@@ -39,7 +39,7 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
 
     # get user input
     print()
-    if dict_name is not "expert":
+    if dict_name != "expert":
         print(f"I spy with my little eye a {dict_name[:-1]} that begins with the letter {secretLetter}")
     else:
         print(f"I spy with my little eye an object that begins with the letter {secretLetter}")
