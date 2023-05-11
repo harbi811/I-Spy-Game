@@ -78,8 +78,11 @@ def userPlay(dict_name, chosenCategory):
     print()
     print('Please type "yes / y" or "no / n" to my guesses')
 
-    print(f"It is your turn to play, Please type the first letter of your secret word")
-
+    if dict_name != "expert":
+        print(f"It is your turn to play, Please type in the first letter of your secret {dict_name[:-1]}(s)")
+    else:
+        print("It is your turn to play, Please type in the first letter of your secret object")
+        
     print()
 
     userWords =[]
