@@ -2,7 +2,7 @@
 class Categories:
     def __init__(self):
 
-    # animals
+        # animals
         self.animals = {'a': ['aardvark', 'antelope', 'alpaca', 'anaconda', 'anteater'],
                         'b': ['bear', 'buffalo', 'bat', 'beaver', 'baboon'],
                         'c': ['cat', 'crocodile', 'chimpanzee', 'camel', 'crab','cockroach','capybara'],
