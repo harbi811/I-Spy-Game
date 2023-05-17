@@ -53,7 +53,7 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
     print()
 
     userGuesses = 0
-    clues = 1
+    clues = 2
     max_clues = len(secretWord)//2 + 1 
 
     while userGuesses <= 5: 
@@ -75,7 +75,7 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
                     print(f"The first letters of my word are {secretWord[:clues]}")
                     clues += 1
 
-                    if clues == max_clues:
+                    if clues >= max_clues:
                         print(f"My word also ends with {secretWord[-1]}")
                 break
             else:
@@ -91,21 +91,22 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
 
 # function for the computer to guess the user's word
 
-def userPlay(dict_name, chosenCategory):
+def userPlay(dict_name, chosenCategory, userWords = []):
+    # userWords list is for words the computer fails to guess and are provided by the user
+    # if the user continues to play, this list of words should be available and appended to
+    
     print()
-    print('Please type "yes / y" or "no / n" to my guesses')
 
     if dict_name != "expert":
         print(f"It is your turn to play, Please type in the first letter of your secret {dict_name[:-1]}")
     else:
         print("It is your turn to play, Please type in the first letter of your secret object")
 
+    print('Type "yes / y" or "no / n" to my guesses')
     print()
 
-    # if the user continues to play, this list of words should be available
-    # so that computer can use words previously guessed by user
-    global userWords
-    userWords = []
+    # this list is for words already guess by the computer
+    usedWords = []
 
     computerGuesses = 0
     unavailableKey = 0
@@ -118,56 +119,60 @@ def userPlay(dict_name, chosenCategory):
         userStartingLetter = input("Enter first letter of your word:  ").lower()
         
         if userStartingLetter in keys_available:
-            words_available = chosenCategory[userStartingLetter] + userWords 
+            words_available = chosenCategory[userStartingLetter] # + userWords (if the user changes category, the wrong words are available)
 
             while computerGuesses <= 5:
 
                 computerGuesses += 1
 
-                usedWords = []
-
+                # do not guess the same words twice
                 new_words_available = list(set(words_available) - set(usedWords))
 
-                wordGuessIndex = random.randint(0, len(new_words_available)-1) # think about situations where you are out of words, what happens?
-                wordGuess = new_words_available[wordGuessIndex]
-                usedWords.append(wordGuess)
-
+                # think about situations where you are out of words, what happens?
+                if len(new_words_available) < 1:
+                    print("I am out of words") # improve logic flow of function so that you can capture word by player
+                    break
+                else:
+                    wordGuess = random.choice(new_words_available)
+                    usedWords.append(wordGuess)
 
                 print('Is your secret word ' + str(wordGuess) + ' ?')
                 time.sleep(2)
                 
-                userResponse  = input()  # rename this variable
+                userResponse  = input()
+          
+                if userResponse == "yes" or userResponse == 'y':
+                    print("Hooray, I made the right guess in " + str(computerGuesses) + " attempt(s)") # do you want to refine this for number of attempts?  
 
+                    break
+                else:
+                    pass
 
+            else:
+                print("Apologies, I am unable to guess your word")
                 
-            #     if userResponse == "yes" or userResponse == 'y':
-            #         print("Hooray, I made the right guess in " + str(computerGuesses) + " attempt(s)") # do you want to refine this for number of attempts?  
+                # user should provide word that begins with same starting letter specified earlier
+                while True:
+                    print("What was your word?")
+                    userWord = input().lower()
 
-            #         break
-            #     else:
-            #         pass
+                    if userWord[0] == userStartingLetter:
+                        userWords.append(userWord)
 
-            # else:
-            #     print("Apologies, I am unable to guess your word")
-            #     time.sleep(2)
-            #     print("What was your word?")
-            #     userWord = input().lower()
-
-            #     if userWord[0] != userResponse:
-            #         print(f"You secret word must begin with the letter {userResponse} you specified earlier")
-
-            #     else:
-            #         userWords.append(userWord)   
+                        break
+                else:
+                    print(f"Your secret word must begin with the letter {userStartingLetter} you specified earlier") 
+            
             break
         else:
             unavailableKey +=1
 
             print()
-            print(f"Please choose another letter. My database of {dict_name} does not have words that begin {userStartingLetter}")
+            print(f"My database of {dict_name} does not have words that begin {userStartingLetter}")
             print("Please choose another letter")
 
     else:
-        print("You have entered the incorrect letter too many times")
+        print("You have entered an unavailable letter too many times")
 
 
 

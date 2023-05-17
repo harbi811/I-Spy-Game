@@ -107,7 +107,7 @@ class Categories:
                         'n': ['nest', 'nose', 'nut', 'needle', 'necklace', 'night', 'net'],
                         'o': ['orange', 'octopus', 'ocean', 'ostrich', 'owl', 'onion', 'olive'],
                         'p': ['pig', 'pizza', 'pear', 'peacock', 'penguin', 'pencil', 'pumpkin'],
-                        'q': ['queen', 'quilt', 'quail', 'quartz', 'quiver', 'quiet'],
+                        'q': ['queen', 'quilt', 'quail', 'quartz'],
                         'r': ['rabbit', 'rainbow', 'rose', 'robot', 'rhino', 'ring', 'rocket'],
                         's': ['sun', 'snake', 'star', 'snowman', 'squirrel', 'spider', 'smile'],
                         't': ['tree', 'tiger', 'trumpet', 'turtle', 'tomato', 'teapot', 'table'],
