@@ -44,7 +44,6 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
 
     time.sleep(2)
 
-    # get user input
     print()
     if dict_name != "expert":
         print(f"I spy with my little eye a(n) {dict_name[:-1]} that begins with the letter {secretLetter}")
@@ -54,11 +53,13 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
     print()
 
     userGuesses = 0
-    clues = 2
+    clues = 1
+    max_clues = len(secretWord)//2 + 1 
 
     while userGuesses <= 5: 
         
-        playerInput = input()
+        playerInput = input("Enter your guess: ")
+        print()
         
         userGuesses += 1
 
@@ -70,11 +71,11 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
                 print("No, please try again")
                 print()
                 
-                if clues <=5:
+                if clues < max_clues:
                     print(f"The first letters of my word are {secretWord[:clues]}")
                     clues += 1
 
-                    if clues > 4:
+                    if clues == max_clues:
                         print(f"My word also ends with {secretWord[-1]}")
                 break
             else:
