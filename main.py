@@ -27,11 +27,8 @@ displayIntro()
 while playAgain == 'yes' or playAgain == 'y':
 
     print()
-    print("Which category would you like to play")
-    dict_name = input().lower()
 
-    chosenCategory = play.chooseCategory(dict_name)
-
+    chosenCategory, dict_name = play.chooseCategory()
 
     # generate secret letter
     secretLetter, secretWord = play.chooseLetterWord(chosenCategory)

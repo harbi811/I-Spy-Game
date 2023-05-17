@@ -5,19 +5,28 @@ from categories import Categories
 # import word category when specified by the user
 # user chooses to play fruits, animal or places or random_words
 
-def chooseCategory(dict_name):   
-    try:
+def chooseCategory():   
+    
+    exception_occurred = True
+    while exception_occurred:
+        dict_name = input("Enter the name of your category: ").lower()
         
-        cat_dicts = vars(Categories())
-        chosenCategory = cat_dicts[dict_name]
-        
-    except KeyError:
-        print(f"I am sorry, {dict_name} is not available")
-        return None
+        try:
+            
+            cat_dicts = vars(Categories())
+            chosenCategory = cat_dicts[dict_name]
 
-    else:    
-        print(f"Successfully imported {dict_name} category")
-        return chosenCategory
+            exception_occurred = False
+            
+        except KeyError:
+            print(f"I am sorry, {dict_name} is not available")
+            print(f"Please choose one of these categories, {list(cat_dicts.keys())}\n")
+            
+            exception_occurred = True
+
+        else:    
+            print(f"Successfully imported {dict_name} category")
+            return chosenCategory, dict_name
     
 
 # choose letter and word from chosen user_category
@@ -38,7 +47,7 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
     # get user input
     print()
     if dict_name != "expert":
-        print(f"I spy with my little eye a {dict_name[:-1]} that begins with the letter {secretLetter}")
+        print(f"I spy with my little eye a(n) {dict_name[:-1]} that begins with the letter {secretLetter}")
     else:
         print(f"I spy with my little eye an object that begins with the letter {secretLetter}")
 
@@ -47,14 +56,14 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
     userGuesses = 0
     clues = 2
 
-    while userGuesses <= 5: # or playerInput == secretWord:
+    while userGuesses <= 5: 
         
         playerInput = input()
         
         userGuesses += 1
 
         # test first letter of user input
-        if playerInput[0] == secretLetter:
+        if playerInput[0].lower() == secretLetter:
 
             # # provide clues to the play after 2 fails
             while playerInput != secretWord:
@@ -86,18 +95,21 @@ def userPlay(dict_name, chosenCategory):
     print('Please type "yes / y" or "no / n" to my guesses')
 
     if dict_name != "expert":
-        print(f"It is your turn to play, Please type in the first letter of your secret {dict_name[:-1]}(s)")
+        print(f"It is your turn to play, Please type in the first letter of your secret {dict_name[:-1]}")
     else:
         print("It is your turn to play, Please type in the first letter of your secret object")
 
     print()
 
-    userWords =[]
+    # if the user continues to play, this list of words should be available
+    # so that computer can use words previously guessed by user
+    global userWords
+    userWords = []
 
     computerGuesses = 0
     unavailableKey = 0
 
-    # catch letters/keys that are not available in dictionary
+    # used to catch letters/keys that are not available in dictionary
     keys_available = list(chosenCategory.keys())
   
 
@@ -105,7 +117,7 @@ def userPlay(dict_name, chosenCategory):
         userStartingLetter = input("Enter first letter of your word:  ").lower()
         
         if userStartingLetter in keys_available:
-            words_available = chosenCategory[userStartingLetter] + userWords # improve so that computer can use words previously guessed by user
+            words_available = chosenCategory[userStartingLetter] + userWords 
 
             while computerGuesses <= 5:
 
@@ -113,21 +125,11 @@ def userPlay(dict_name, chosenCategory):
 
                 usedWords = []
 
+                new_words_available = list(set(words_available) - set(usedWords))
 
-                wordGuess = None
-
-                while wordGuess not in  usedWords:
-                    wordGuessIndex = random.randint(0, len(words_available)-1) # improve so that a previously guessed word is not returned, sample without replacement
-                    wordGuess = words_available[wordGuessIndex]
-                    usedWords.append(wordGuess)
-
-                else:
-                    new_words_available = list(set(words_available) - set(usedWords))
-                    # new_words_available = [words_available[i] for i in availableIndices]
-
-                    wordGuessIndex = random.randint(0, len(new_words_available)-1) # think about situations where you are out of words, what happens?
-                    wordGuess = new_words_available[wordGuessIndex]
-                    usedWords.append(wordGuess)
+                wordGuessIndex = random.randint(0, len(new_words_available)-1) # think about situations where you are out of words, what happens?
+                wordGuess = new_words_available[wordGuessIndex]
+                usedWords.append(wordGuess)
 
 
                 print('Is your secret word ' + str(wordGuess) + ' ?')
@@ -135,22 +137,26 @@ def userPlay(dict_name, chosenCategory):
                 
                 userResponse  = input()  # rename this variable
 
-                if userResponse == "yes" or userResponse == 'y':
-                    print("Hooray, I made the right guess in " + str(computerGuesses) + " attempt(s)") # do you want to refine this for number of attempts?
-                    
 
-                    break
-                elif userResponse == "no" or userResponse == "n":
-                    pass
+                
+            #     if userResponse == "yes" or userResponse == 'y':
+            #         print("Hooray, I made the right guess in " + str(computerGuesses) + " attempt(s)") # do you want to refine this for number of attempts?  
 
-            else:
-                print("Apologies, I am unable to guess your word")
-                time.sleep(2)
-                print("What was your word?")
-                userWord = input()
-                print("")
-                userWords.append(userWord)
+            #         break
+            #     else:
+            #         pass
 
+            # else:
+            #     print("Apologies, I am unable to guess your word")
+            #     time.sleep(2)
+            #     print("What was your word?")
+            #     userWord = input().lower()
+
+            #     if userWord[0] != userResponse:
+            #         print(f"You secret word must begin with the letter {userResponse} you specified earlier")
+
+            #     else:
+            #         userWords.append(userWord)   
             break
         else:
             unavailableKey +=1
