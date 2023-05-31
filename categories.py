@@ -68,7 +68,7 @@ class Categories:
                     'b': ['banana', 'blackberry', 'blueberry', 'boysenberry', 'bilberry'],
                         'c': ['cherry', 'coconut', 'clementine', 'cantaloupe', 'cranberry'],
                         'd': ['date', 'dragonfruit', 'durian'],
-                        'e': ['elderberry'],
+                        'e': ['elderberry','eggplant'],
                         'f': ['fig', 'feijoa'],
                         'g': ['gooseberry', 'grape', 'guava'],
                         'h': ['honeydew melon', 'huckleberry'],
