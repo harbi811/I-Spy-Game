@@ -90,92 +90,6 @@ def computerPlay(dict_name, chosenCategory, secretLetter, secretWord):
 
 
 
-# function for the computer to guess the user's word
-
-# def userPlay(dict_name, chosenCategory, userWords = []):
-#     # userWords list is for words the computer fails to guess and are provided by the user
-#     # if the user continues to play, this list of words should be available and appended to
-    
-#     print()
-
-#     if dict_name != "expert":
-#         print(f"It is your turn to play, Please type in the first letter of your secret {dict_name[:-1]}")
-#     else:
-#         print("It is your turn to play, Please type in the first letter of your secret object")
-
-#     print('Type "yes / y" or "no / n" to my guesses')
-#     print()
-
-#     # this list is for words already guess by the computer
-#     usedWords = []
-
-#     computerGuesses = 0
-#     unavailableKey = 0
-
-#     # used to catch letters/keys that are not available in dictionary
-#     keys_available = list(chosenCategory.keys())
-  
-
-#     while unavailableKey <= 3:
-#         userStartingLetter = input("Enter first letter of your word:  ").lower()
-        
-#         if userStartingLetter in keys_available:
-#             words_available = chosenCategory[userStartingLetter] # + userWords (if the user changes category, the wrong words are available)
-
-#             while computerGuesses <= 5:
-
-#                 computerGuesses += 1
-
-#                 # do not guess the same words twice
-#                 new_words_available = list(set(words_available) - set(usedWords))
-
-#                 # think about situations where you are out of words, what happens?
-#                 if len(new_words_available) < 1:
-#                     print("I am out of words") # improve logic flow of function so that you can capture word by player
-#                     break
-#                 else:
-#                     wordGuess = random.choice(new_words_available)
-#                     usedWords.append(wordGuess)
-
-#                 print('Is your secret word ' + str(wordGuess) + ' ?')
-#                 time.sleep(2)
-                
-#                 userResponse  = input()
-          
-#                 if userResponse == "yes" or userResponse == 'y':
-#                     print("Hooray, I made the right guess in " + str(computerGuesses) + " attempt(s)") # do you want to refine this for number of attempts?  
-
-#                     break
-#                 else:
-#                     pass
-
-#             else:
-#                 print("Apologies, I am unable to guess your word")
-                
-#                 # user should provide word that begins with same starting letter specified earlier
-#                 while True:
-#                     print("What was your word?")
-#                     userWord = input().lower()
-
-#                     if userWord[0] == userStartingLetter:
-#                         userWords.append(userWord)
-
-#                         break
-#                 else:
-#                     print(f"Your secret word must begin with the letter {userStartingLetter} you specified earlier") 
-            
-#             break
-#         else:
-#             unavailableKey +=1
-
-#             print()
-#             print(f"My database of {dict_name} does not have words that begin {userStartingLetter}")
-#             print("Please choose another letter")
-
-#     else:
-#         print("You have entered an unavailable letter too many times")
-
-
 # Function to get the user's starting letter
 def get_user_starting_letter(chosenCategory):
     unavailableKey = 0
@@ -193,6 +107,7 @@ def get_user_starting_letter(chosenCategory):
             print("Please choose another letter")
 
     print("You have entered an unavailable letter too many times")
+
 
 # Function for the computer to make guesses
 def computer_guess_words(chosenCategory, userStartingLetter, usedWords):
@@ -217,11 +132,10 @@ def computer_guess_words(chosenCategory, userStartingLetter, usedWords):
         if userResponse == "yes" or userResponse == 'y':
             print("Hooray, I made the right guess in " + str(computerGuesses) + " attempt(s)")
             return True
-        else:
-            pass
 
     print("Apologies, I am unable to guess your word")
     return False
+
 
 # Function for the user to provide their word
 def user_provide_word(userStartingLetter, userWords):
@@ -252,6 +166,7 @@ def userPlay(dict_name, chosenCategory, userWords=[]):
     print()
 
     userStartingLetter = get_user_starting_letter(chosenCategory)
+    
     usedWords = []
     
     if userStartingLetter:
