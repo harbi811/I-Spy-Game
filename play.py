@@ -65,7 +65,7 @@ def computer_play(category_name, chosen_category, secret_letter, secret_word):
         # test the first letter of user input
         if player_input[0].lower() != secret_letter:
             print(
-                f"{Colour.yellow} Your word must begin with {secret_letter} {Colour.end}"
+                f"{Colour.red} Your word must begin with {secret_letter} {Colour.end}"
             )
 
         # provide clues to the player after 2 fails
