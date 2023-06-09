@@ -38,6 +38,8 @@ class Categories:
             "z": ["zebra", "zorilla", "zebu", "zeedonk"],
         }
 
+
+
         # cities or places
         self.places = {
             "a": ["amsterdam", "ankara", "adelaide", "athens"],

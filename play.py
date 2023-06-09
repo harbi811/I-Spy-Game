@@ -50,6 +50,7 @@ def computer_play(category_name, chosen_category, secret_letter, secret_word):
             f"I spy with my little eye an object that begins with the letter {secret_letter}"
         )
 
+
     print()
 
     user_guesses = 0
