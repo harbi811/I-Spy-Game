@@ -7,7 +7,8 @@
 sandbox.py
 ^\.[^g].* 
 .idea/*
-.vscode/*
+.vscode/
+__pycache__/
 
 # User-specific files
 *.rsuser
