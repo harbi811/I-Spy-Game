@@ -3,12 +3,13 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-# game files
+# pycharm and game files
 sandbox.py
 ^\.[^g].* 
-
-# ignore all pycharm config
 .idea/*
+.vscode/*
+__pycache__/
+
 
 # User-specific files
 *.rsuser
