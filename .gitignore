@@ -7,8 +7,9 @@
 sandbox.py
 ^\.[^g].* 
 .idea/*
-.vscode/*
 __pycache__/
+test_pytest_tutorial.py
+.pytest_cache/*
 
 
 # User-specific files
@@ -386,7 +387,7 @@ FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
 .vscode/*
-!.vscode/settings.json
+.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json

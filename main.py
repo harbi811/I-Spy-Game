@@ -24,28 +24,36 @@ def display_intro():
     )
 
 
-play_again = "yes"
+def main():
+    "This the main logic of the game"
 
-display_intro()
+    play_again = "yes"
 
-while play_again == "yes" or play_again == "y":
-    print()
+    display_intro()
 
-    chosen_category, category_name = play.choose_category()
+    while play_again == "yes" or play_again == "y":
+        print()
 
-    # generate secret letter and word
-    secret_letter, secret_word = play.choose_letter_word(chosen_category)
+        chosen_category, category_name = play.choose_category()
 
-    # computer plays first
-    play.computer_play(category_name, chosen_category, secret_letter, secret_word)
+        # generate secret letter and word
+        secret_letter, secret_word = play.choose_letter_word(chosen_category)
 
-    # user continues to play the same category
-    play.user_play(category_name, chosen_category)
+        # computer plays first
+        play.computer_play(category_name, chosen_category, secret_letter, secret_word)
 
-    print()
-    print("Do you want to play again? (yes or no)")
-    print()
-    play_again = input()
-    print()
-else:
-    print("Thank you for playing with me")
+        # user continues to play the same category
+        play.user_play(category_name, chosen_category)
+
+        print()
+        print("Do you want to play again? (yes or no)")
+        print()
+        play_again = input()
+        print()
+    else:
+        print("Thank you for playing with me")
+
+
+if __name__ == "__main__":
+    # Call the main function if script has been run from the command line.
+    main()
