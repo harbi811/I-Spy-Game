@@ -38,8 +38,6 @@ class Categories:
             "z": ["zebra", "zorilla", "zebu", "zeedonk"],
         }
 
-
-
         # cities or places
         self.places = {
             "a": ["amsterdam", "ankara", "adelaide", "athens"],
@@ -74,7 +72,14 @@ class Categories:
         self.fruits = {
             "a": ["apple", "apricot", "avocado", "ackee", "acai", "abiu", "ambarella"],
             "b": ["banana", "blackberry", "blueberry", "boysenberry", "bilberry"],
-            "c": ["cherry", "coconut", "clementine", "cantaloupe", "cranberry"],
+            "c": [
+                "cherry",
+                "coconut",
+                "clementine",
+                "cantaloupe",
+                "cranberry",
+                "cucumber",
+            ],
             "d": ["date", "dragonfruit", "durian"],
             "e": ["elderberry", "eggplant"],
             "f": ["fig", "feijoa"],

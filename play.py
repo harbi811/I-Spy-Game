@@ -50,7 +50,6 @@ def computer_play(category_name, chosen_category, secret_letter, secret_word):
             f"I spy with my little eye an object that begins with the letter {secret_letter}"
         )
 
-
     print()
 
     user_guesses = 0
@@ -116,7 +115,7 @@ def get_user_starting_letter(chosen_category):
 
 
 # Function for the computer to make guesses
-def computer_guess_words(chosen_category, user_starting_letter, used_words):
+def computer_guess_word(chosen_category, user_starting_letter, used_words):
     computer_guesses = 0
     words_available = chosen_category[user_starting_letter]
 
@@ -133,7 +132,7 @@ def computer_guess_words(chosen_category, user_starting_letter, used_words):
 
         print(f"Is your secret word {str(word_guess)} ?")
         time.sleep(2)
-        user_response = input()
+        user_response = input().lower()
 
         if user_response == "yes" or user_response == "y":
             print(
@@ -185,7 +184,7 @@ def user_play(category_name, chosen_category, user_words=[]):
     used_words = []
 
     # this is a Boolean
-    success = computer_guess_words(chosen_category, user_starting_letter, used_words)
+    success = computer_guess_word(chosen_category, user_starting_letter, used_words)
     if not success:
         user_provide_word(user_starting_letter, user_words)
     else:
