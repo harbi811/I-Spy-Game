@@ -34,21 +34,25 @@ def main():
     while play_again == "yes" or play_again == "y":
         print()
 
-        chosen_category, category_name = play.choose_category()
+        ui = play.TextUserInterface()
+
+        chosen_category, category_name = play.choose_category(ui)
 
         # generate secret letter and word
         secret_letter, secret_word = play.choose_letter_word(chosen_category)
 
         # computer plays first
-        play.computer_play(category_name, chosen_category, secret_letter, secret_word)
+        play.computer_play(
+            ui, category_name, chosen_category, secret_letter, secret_word
+        )
 
         # user continues to play the same category
-        play.user_play(category_name, chosen_category)
+        play.user_play(ui, category_name, chosen_category)
 
         print()
         print("Do you want to play again? (yes or no)")
         print()
-        play_again = input()
+        play_again = input().lower()
         print()
     else:
         print("Thank you for playing with me")
