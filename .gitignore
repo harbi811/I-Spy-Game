@@ -10,7 +10,6 @@ sandbox.py
 __pycache__/
 test_pytest_tutorial.py
 .pytest_cache/*
-test_play_old
 
 
 # User-specific files

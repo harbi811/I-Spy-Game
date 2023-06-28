@@ -1,9 +1,24 @@
-from io import StringIO
-
 import pytest
 
 import play
 from categories import Categories
+
+
+# class for mocking user input and function output
+class MockUserInterface:
+    def __init__(self, inputs):
+        self.inputs = inputs
+        self.outputs = []
+
+    def input(self, message=None):
+        if len(self.inputs) > 0:
+            return self.inputs.pop()
+        else:
+            raise ValueError("No more inputs provided.")
+            # self.outputs.append(message)
+
+    def output(self, message=None):
+        self.outputs.append(message)
 
 
 # setting up test data using fixtures
@@ -15,138 +30,162 @@ def test_data():
     return test_chosen_category
 
 
-def test_choose_category(monkeypatch, test_data):
-    user_input = StringIO("fruits\n")
+# user provides correct category
+def test_choose_category_correct_category(test_data):
+    ui = MockUserInterface(inputs=["fruits"])
 
-    # how to mock user input through monkeypatching
-    # https://holgerkrekel.net/2009/03/03/monkeypatching-in-unit-tests-done-right/
-    # https://gist.github.com/GenevieveBuckley/efd16862de9e2fe7adfd2bf2bef93e02
-    # https://pavolkutaj.medium.com/simulating-single-and-multiple-inputs-using-pytest-and-monkeypatch-6968274f7eb9
+    chosen_category, category_name = play.choose_category(ui)
 
-    monkeypatch.setattr("sys.stdin", user_input)
-
-    # calling function being tested
-    chosen_category, category_name = play.choose_category()
-
-    # is it the expected dictionary
     assert chosen_category == test_data
 
-    # check if chosen_category returns a dict and category_name is a string
-    assert isinstance(chosen_category, dict)
+    assert len(ui.outputs) == 1
+    assert "Successfully" in ui.outputs[0]
 
 
+# user provides incorrect category
+def test_choose_category_incorrect_category(test_data, capsys):
+    ui = MockUserInterface(inputs=["bananas"])
+
+    # asserting Exceptions
+    with pytest.raises(ValueError) as exception_info:
+        chosen_category, category_name = play.choose_category(ui)
+
+        # no category is expected
+        assert chosen_category == None
+
+        # verify that exception was raised, function exception raised
+        # if exception in test is raised
+        assert "I am sorry" in ui.output[0]
+        assert "Please choose one of these categories" in ui.output[0]
+        assert "Enter the name of your category" in ui.output[0]
+
+    assert exception_info.type == ValueError
+    assert "No more inputs provided" in str(exception_info.value)
+
+
+# test choose_letter_word
 def test_choose_letter_word(test_data):
     secret_letter, secret_word = play.choose_letter_word(test_data)
 
+    # both secret_word and secret_letter are strings
     assert isinstance(secret_letter, str)
     assert isinstance(secret_word, str)
+
+    # secret_letter is one string
     assert len(secret_letter) == 1
+
+    # secret-word is more than one letter long
     assert len(secret_word) > 1
 
+    # first letter of secret_word
+    assert secret_word[0] == secret_letter
 
-# allows one to define multiple sets of arguments and fixtures at the test function
-# list parameters as a string and their corresponding values in tuples within a list
-@pytest.mark.parametrize(
-    "category_name, chosen_category,secret_letter, secret_word",
-    [
-        (
-            "fruits",
-            {
-                "a": [
-                    "apple",
-                    "apricot",
-                    "avocado",
-                    "ackee",
-                    "acai",
-                    "abiu",
-                    "ambarella",
-                ],
-                "b": ["banana", "blackberry", "blueberry", "boysenberry", "bilberry"],
-                "c": ["cherry", "coconut", "clementine", "cantaloupe", "cranberry"],
-            },
-            "b",
-            "blackberry",
-        ),
-        (
-            "animals",
-            {
-                "a": ["aardvark", "antelope", "alpaca", "anaconda", "anteater"],
-                "b": ["bear", "buffalo", "bat", "beaver", "baboon"],
-                "c": [
-                    "cat",
-                    "crocodile",
-                    "chimpanzee",
-                    "camel",
-                    "crab",
-                    "cockroach",
-                    "capybara",
-                ],
-            },
-            "c",
-            "cat",
-        ),
-    ],
-)
-def test_computer_play(
-    category_name, chosen_category, secret_letter, secret_word, capsys, monkeypatch
-):
-    # mock guess by the player
-    user_guess = "blackberry"
-    monkeypatch.setattr("builtins.input", lambda _: user_guess)
-    # monkeypatch.setattr("sys.stdin", user_guess), raises AttributeError: 'str' object has no attribute 'readline'
 
-    # call computer_play function
-    play.computer_play(category_name, chosen_category, secret_letter, secret_word)
+# user makes correct guess
+def test_computer_play_correct_guesses(test_data):
+    # mock guesses by the player
+    ui = MockUserInterface(inputs=["banana"])
+    chosen_category = test_data
+    secret_letter = "b"
+    secret_word = "banana"
+    category_name = "fruits"
 
-    # what to test in the function - printed statements?
-    # using capsys
-    # During test execution any output sent to stdout and stderr is captured
-    # Only writes to Python files sys.stdout and sys.stderr will be captured
-    captured_statements = capsys.readouterr()
-    # statements in captured_statements.out and captured_statements.err
+    play.computer_play(ui, category_name, chosen_category, secret_letter, secret_word)
 
     assert (
         f"I spy with my little eye a(n) {category_name[:-1]} that begins with the letter {secret_letter}"
-        in captured_statements.out
+        in ui.outputs[0]
+    )
+    assert "Yes, you are correct" in ui.outputs[1]
+
+
+# a few incorrect guesses
+def test_computer_play_few_incorrect_guesses(test_data):
+    # mock guesses by the player
+    ui = MockUserInterface(inputs=["cat", "blackberry", "beaver", "boot"])
+    chosen_category = test_data
+    secret_letter = "b"
+    secret_word = "banana"
+    category_name = "fruits"
+
+    with pytest.raises(ValueError) as exception_info:
+        play.computer_play(
+            ui, category_name, chosen_category, secret_letter, secret_word
+        )
+        assert f"Your word must begin with {secret_letter}" in ui.outputs[0]
+        assert "No, please try again" in ui.outputs[0]
+        assert "The first letters of my word are" in ui.outputs[0]
+
+    assert (
+        f"I spy with my little eye a(n) {category_name[:-1]} that begins with the letter {secret_letter}"
+        in ui.outputs[0]
+    )
+    assert exception_info.type == ValueError
+    assert "No more inputs provided" in str(exception_info.value)
+
+
+# wuth many incorrect guesses
+def test_computer_play_many_incorrect_guesses(test_data):
+    # mock guesses by the player
+    ui = MockUserInterface(
+        inputs=["cat", "blackberry", "beaver", "boot", "blank", "blue"]
+    )
+    chosen_category = test_data
+    secret_letter = "b"
+    secret_word = "banana"
+    category_name = "fruits"
+
+    play.computer_play(ui, category_name, chosen_category, secret_letter, secret_word)
+    assert (
+        f"I spy with my little eye a(n) {category_name[:-1]} that begins with the letter {secret_letter}"
+        in ui.outputs[0]
     )
 
-    if user_guess != "blackberry":
-        assert "You have made too many guesses" in captured_statements.out
-        assert f"My word was {secret_word}" in captured_statements.out
-    else:
-        # assert "Yes, you are correct" in captured_statements.out
-        assert f"Your word must begin with {secret_letter}"
+    assert "No, please try again" in ui.outputs[1]
+    assert "The first letters of my word are" in ui.outputs[2]
 
-    # how to cater for multiple guesses - does monkeypatch take care of this
-    # how to test number of guesses and clues?
+    assert "You have made too many guesses" in ui.outputs[-2]
+    assert f"My word was {secret_word}" in ui.outputs[-1]
 
 
 # test get_user_starting_letter
-def test_get_user_starting_letter(test_data, monkeypatch, capsys):
-    user_letter = "a"
-    monkeypatch.setattr("builtins.input", lambda _: user_letter)
-    # underscore as a variable name is usually a name for an ignored variable
+def test_get_user_starting_letter_available_key(test_data):
+    ui = MockUserInterface(inputs=["a"])
 
-    user_starting_letter = play.get_user_starting_letter(test_data)
-
-    captured_statements = capsys.readouterr()
+    user_starting_letter = play.get_user_starting_letter(ui, test_data)
 
     assert user_starting_letter == "a"
 
-    if user_letter not in test_data.keys():
-        assert (
-            f"My database does not have words that begin with {user_starting_letter}"
-            in captured_statements.out
-        )
-        assert "Please choose another letter" in captured_statements.out
-    else:
-        # no statement is printed when function is successful
-        pass
+
+def test_get_user_starting_letter_few_unavailable_keys(test_data):
+    ui = MockUserInterface(inputs=["x", "x"])
+    chosen_category = test_data
+
+    with pytest.raises(ValueError) as exception_info:
+        user_starting_letter = play.get_user_starting_letter(ui, chosen_category)
+
+        assert f"My database does not have words that begin with" in ui.outputs[0]
+        assert "Please choose another letter" in ui.outputs[0]
+    assert exception_info.type == ValueError
+    assert "No more inputs provided" in str(exception_info.value)
 
 
-# test computer_guess_words
-# mock scenarios where success == True, success == False
-# mock where all words are used up
+def test_get_user_starting_letter_many_unavailable_keys(test_data):
+    ui = MockUserInterface(inputs=["x", "x", "x", "x"])
+    chosen_category = test_data
+
+    user_starting_letter = play.get_user_starting_letter(ui, chosen_category)
+
+    assert f"My database does not have words that begin with" in ui.outputs[0]
+    assert "Please choose another letter" in ui.outputs[1]
+
+    assert "You have entered an unavailable letter too many times" in ui.outputs[-1]
+
+
+# test computer_guess_words, returns boolean
+# mock scenarios where
+# makes correct guess
+# runs out of words
 
 
 @pytest.mark.parametrize(
@@ -159,99 +198,85 @@ def test_get_user_starting_letter(test_data, monkeypatch, capsys):
                     "apricot",
                     "avocado",
                     "ackee",
-                    "acai",
-                    "abiu",
-                    "ambarella",
-                ],
-                "b": ["banana", "blackberry", "blueberry", "boysenberry", "bilberry"],
-            },
-            "a",
-            ["apple", "ackee", "acai"],
-            True,
-        ),
-        (
-            {
-                "a": [
-                    "apple",
-                    "apricot",
-                    "avocado",
                     "ackee",
                     "acai",
                     "abiu",
                     "ambarella",
                 ],
-                "b": ["banana", "blackberry", "blueberry", "boysenberry", "bilberry"],
+                "b": ["banana", "blackberry", "blueberry"],
+            },
+            "a",
+            ["apple"],
+            True,
+        ),
+        (
+            {
+                "a": ["apple", "apricot", "avocado"],
+                "b": ["banana", "blackberry", "blueberry"],
             },
             "b",
-            ["blueberry", "boysenberry"],
+            ["banana", "blackberry", "blueberry"],
             False,
         ),
     ],
 )
 def test_computer_guess_word(
-    chosen_category,
-    user_starting_letter,
-    used_words,
-    expected_bool,
-    monkeypatch,
-    capsys,
+    chosen_category, user_starting_letter, used_words, expected_bool
 ):
     # mock user response - yes or no
-    user_input = "yes"
-    monkeypatch.setattr("builtins.input", lambda _: user_input)
+    ui = MockUserInterface(inputs=["yes"])
 
     success = play.computer_guess_word(
-        chosen_category, user_starting_letter, used_words
+        ui, chosen_category, user_starting_letter, used_words
     )
 
-    captured_statements = capsys.readouterr()
-
-    if success == expected_bool:
-        assert "Hooray, I made the right guess in" in captured_statements.out
+    if success == True:
+        assert "Is your secret word" in ui.outputs[0]
+        assert "Hooray, I made the right guess in" in ui.outputs[1]
     else:
-        assert "Apologies, I am unable to guess your word" in captured_statements.out
+        assert "I am out of words" in ui.outputs[0]
 
-        # how about I am out of words
+
+# test_computer_guess_word - runs out of guesses
+def test_computer_guess_word_many_guesses(test_data):
+    mock_input = ["no"] * 6
+    ui = MockUserInterface(inputs=mock_input)
+
+    chosen_category = test_data
+    user_starting_letter = "a"
+    used_words = []
+
+    success = play.computer_guess_word(
+        ui, chosen_category, user_starting_letter, used_words
+    )
+
+    assert success == False
+    assert "Is your secret word" in ui.outputs[0]
+    assert "Apologies, I am unable to guess your word" in ui.outputs[-1]
 
 
 # test user_provide_word
-
-
-def test_user_provide_word(monkeypatch, capsys):
+def test_user_provide_word_correct_word(ui, user_starting_letter, user_words):
     # mock user word
-    user_input = "banana"
-    monkeypatch.setattr("builtins.input", lambda _: user_input)
-
+    ui = MockUserInterface(inputs=["banana"])
     user_starting_letter = "b"
     user_words = []
 
-    play.user_provide_word(user_starting_letter, user_words)
-
-    captured_statements = capsys.readouterr()
-
-    assert "What was your word?" in captured_statements.out
-    assert "Your secret word must begin with  the letter" not in captured_statements.out
+    play.user_provide_word(ui, user_starting_letter, user_words)
+    assert "What was your word" in ui.outputs[1]
+    # assert "Your secret word must begin with the letter" in ui.outputs[-1]
 
 
-# test function for user_play
-# test inner logic too
-
-
-def test_user_play(capsys, test_data, monkeypatch):
-    # mock user input because this function requires starting letter
-    user_starting_letter = "a"
-    monkeypatch.setattr("builtins.input", lambda _: user_starting_letter)
+# test_user_play function
+def test_user_play(test_data):
+    # input for different functions
+    mock_input = ["a", "yes"][::-1]  # reverse list
+    ui = MockUserInterface(inputs=mock_input)
 
     category_name = "fruits"
     chosen_category = test_data
 
-    play.user_play(category_name, chosen_category)
-
-    captured_statements = capsys.readouterr()
-
-    assert "It is your turn to play" in captured_statements.out
-    assert "to my guesses" in captured_statements.out
-    assert "Is your secret word" in captured_statements.out
-
-
-# using a custom function to mock user input
+    play.user_play(ui, category_name, chosen_category)
+    assert "It is your turn to play" in ui.outputs[0]
+    assert "Is your secret word" in ui.outputs[2]
+    assert "Hooray" in ui.outputs[-1]
