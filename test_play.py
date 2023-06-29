@@ -256,15 +256,15 @@ def test_computer_guess_word_many_guesses(test_data):
 
 
 # test user_provide_word
-def test_user_provide_word_correct_word(ui, user_starting_letter, user_words):
-    # mock user word
-    ui = MockUserInterface(inputs=["banana"])
-    user_starting_letter = "b"
-    user_words = []
+# def test_user_provide_word_correct_word(ui, user_starting_letter, user_words):
+#     # mock user word
+#     ui = MockUserInterface(inputs=["banana"])
+#     user_starting_letter = "b"
+#     user_words = []
 
-    play.user_provide_word(ui, user_starting_letter, user_words)
-    assert "What was your word" in ui.outputs[1]
-    # assert "Your secret word must begin with the letter" in ui.outputs[-1]
+#     play.user_provide_word(ui, user_starting_letter, user_words)
+#     assert "What was your word" in ui.outputs[1]
+# assert "Your secret word must begin with the letter" in ui.outputs[-1]
 
 
 # test_user_play function

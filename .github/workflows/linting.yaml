@@ -1,0 +1,30 @@
+# for continuous integration and delivery
+# GitHub provides Linux, Windows and macOS virtual machines
+# workflows defined using yaml and run when triggered by event
+# events (opening an issue, creating a PR, pushes a commit, ...)
+# events - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#push
+
+name: linting
+run-name: linting with flake8
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+jobs:
+  linting_with_flake8: # job_name
+    strategy:
+      fail-fast: true # any step that fails, the whole job is marked as failed
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This is a GitHub Action for linting with flake8"
+      # these are github repos 😊 https://github.com/actions
+      - uses: actions/checkout@v3 #checks out repository onto runner vm for actions to be run
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - uses: pre-commit/action@v3.0.0
