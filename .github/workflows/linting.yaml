@@ -16,7 +16,7 @@ on:
     branches:
       - main
 jobs:
-  linting_with_flake8: # job_name
+  linting: # job_name
     strategy:
       fail-fast: true # any step that fails, the whole job is marked as failed
     runs-on: ubuntu-latest
