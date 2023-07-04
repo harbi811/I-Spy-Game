@@ -97,11 +97,13 @@ def test_computer_play_correct_guesses(test_data):
     secret_word = "banana"
     category_name = "fruits"
 
-    play.computer_play(ui, category_name, chosen_category, secret_letter, secret_word)
+    play.computer_play(
+        ui, category_name, chosen_category, secret_letter, secret_word
+    )
 
     assert (
-        f"I spy with my little eye a(n) {category_name[:-1]} that begins with the letter {secret_letter}"
-        in ui.outputs[0]
+        f"I spy with my little eye a(n) {category_name[:-1]} "
+        f"that begins with the letter {secret_letter}" in ui.outputs[0]
     )
     assert "Yes, you are correct" in ui.outputs[1]
 
@@ -124,8 +126,8 @@ def test_computer_play_few_incorrect_guesses(test_data):
         assert "The first letters of my word are" in ui.outputs[0]
 
     assert (
-        f"I spy with my little eye a(n) {category_name[:-1]} that begins with the letter {secret_letter}"
-        in ui.outputs[0]
+        f"I spy with my little eye a(n) {category_name[:-1]} that begins with "
+        f"the letter {secret_letter}" in ui.outputs[0]
     )
     assert exception_info.type == NoMoreInputs
     assert "No more inputs provided" in str(exception_info.value)
@@ -142,10 +144,12 @@ def test_computer_play_many_incorrect_guesses(test_data):
     secret_word = "banana"
     category_name = "fruits"
 
-    play.computer_play(ui, category_name, chosen_category, secret_letter, secret_word)
+    play.computer_play(
+        ui, category_name, chosen_category, secret_letter, secret_word
+    )
     assert (
-        f"I spy with my little eye a(n) {category_name[:-1]} that begins with the letter {secret_letter}"
-        in ui.outputs[0]
+        f"I spy with my little eye a(n) {category_name[:-1]} that begins "
+        f"with the letter {secret_letter}" in ui.outputs[0]
     )
 
     assert "No, please try again" in ui.outputs[1]
@@ -169,9 +173,13 @@ def test_get_user_starting_letter_few_unavailable_keys(test_data):
     chosen_category = test_data
 
     with pytest.raises(NoMoreInputs) as exception_info:
-        user_starting_letter = play.get_user_starting_letter(ui, chosen_category)
+        user_starting_letter = play.get_user_starting_letter(
+            ui, chosen_category
+        )
 
-        assert f"My database does not have words that begin with" in ui.outputs[0]
+        assert (
+            "My database does not have words that begin with" in ui.outputs[0]
+        )
         assert "Please choose another letter" in ui.outputs[0]
     assert exception_info.type == NoMoreInputs
     assert "No more inputs provided" in str(exception_info.value)
@@ -183,10 +191,13 @@ def test_get_user_starting_letter_many_unavailable_keys(test_data):
 
     user_starting_letter = play.get_user_starting_letter(ui, chosen_category)
 
-    assert f"My database does not have words that begin with" in ui.outputs[0]
+    assert "My database does not have words that begin with" in ui.outputs[0]
     assert "Please choose another letter" in ui.outputs[1]
 
-    assert "You have entered an unavailable letter too many times" in ui.outputs[-1]
+    assert (
+        "You have entered an unavailable letter too many times"
+        in ui.outputs[-1]
+    )
 
 
 # test computer_guess_words, returns boolean
@@ -263,7 +274,8 @@ def test_computer_guess_word_many_guesses(test_data):
 
 
 # test user_provide_word
-# def test_user_provide_word_correct_word(ui, user_starting_letter, user_words):
+# def test_user_provide_word_correct_word(ui, user_starting_letter,
+#                                                        user_words):
 #     # mock user word
 #     ui = MockUserInterface(inputs=["banana"])
 #     user_starting_letter = "b"

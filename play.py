@@ -33,11 +33,14 @@ def choose_category(ui):
 
         except KeyError:
             ui.output(
-                f"{Colour.yellow} I am sorry, {category_name} is not available \n Please choose one of these categories, {list(cat_dicts.keys())}\n {Colour.end}"
+                f"{Colour.yellow} I am sorry, {category_name} is not available"
+                "\n Please choose one of these categories, "
+                f"{list(cat_dicts.keys())}\n {Colour.end}"
             )
 
     ui.output(
-        f"{Colour.green} Successfully imported {category_name} category {Colour.end}"
+        f"{Colour.green} Successfully imported {category_name} "
+        f"category {Colour.end}"
     )
     return chosen_category, category_name
 
@@ -51,17 +54,21 @@ def choose_letter_word(chosen_category):
 
 
 # function for the user to guess the computer's word
-def computer_play(ui, category_name, chosen_category, secret_letter, secret_word):
+def computer_play(
+    ui, category_name, chosen_category, secret_letter, secret_word
+):
     time.sleep(2)
 
     print()
     if category_name != "expert":
         ui.output(
-            f"I spy with my little eye a(n) {category_name[:-1]} that begins with the letter {secret_letter}"
+            f"I spy with my little eye a(n) {category_name[:-1]} that begins "
+            f"with the letter {secret_letter}"
         )
     else:
         ui.output(
-            f"I spy with my little eye an object that begins with the letter {secret_letter}"
+            f"I spy with my little eye an object that begins with the letter "
+            f"{secret_letter}"
         )
 
     print()
@@ -79,7 +86,8 @@ def computer_play(ui, category_name, chosen_category, secret_letter, secret_word
         # test the first letter of user input
         if player_input[0].lower() != secret_letter:
             ui.output(
-                f"{Colour.red} Your word must begin with {secret_letter} {Colour.end}"
+                f"{Colour.red} Your word must begin with {secret_letter} "
+                f"{Colour.end}"
             )
 
         # provide clues to the player after 2 fails
@@ -89,18 +97,21 @@ def computer_play(ui, category_name, chosen_category, secret_letter, secret_word
 
             if clues < max_clues:
                 ui.output(
-                    f"{Colour.cyan} The first letters of my word are {secret_word[:clues]} {Colour.end}"
+                    f"{Colour.cyan} The first letters of my word are "
+                    f"{secret_word[:clues]} {Colour.end}"
                 )
                 clues += 1
             else:
                 ui.output(
-                    f"{Colour.cyan} The first letters of my word are {secret_word[:clues]} \n My word also ends with {secret_word[-1]} {Colour.end}"
+                    f"{Colour.cyan} The first letters of my word are "
+                    f"{secret_word[:clues]} \n My word also ends with "
+                    f"{secret_word[-1]} {Colour.end}"
                 )
 
         else:
             ui.output(f"{Colour.green} Yes, you are correct {Colour.end}")
 
-            # break out of while loop if the player does not all available guesses
+            # break out if the player does not all available guesses
             break
     else:
         ui.output(f"{Colour.red} You have made too many guesses {Colour.end}")
@@ -113,7 +124,9 @@ def get_user_starting_letter(ui, chosen_category):
     keys_available = list(chosen_category.keys())
 
     while unavailable_key <= 3:
-        user_starting_letter = ui.input("Enter the first letter of your word: ").lower()
+        user_starting_letter = ui.input(
+            "Enter the first letter of your word: "
+        ).lower()
 
         if user_starting_letter in keys_available:
             return user_starting_letter
@@ -121,11 +134,12 @@ def get_user_starting_letter(ui, chosen_category):
             unavailable_key += 1
             print()
             ui.output(
-                f"My database does not have words that begin with {user_starting_letter}"
+                f"My database does not have words that begin with "
+                f"{user_starting_letter}"
             )
-            ui.output(f"Please choose another letter")
+            ui.output("Please choose another letter")
 
-    ui.output(f"You have entered an unavailable letter too many times")
+    ui.output("You have entered an unavailable letter too many times")
 
 
 # Function for the computer to make guesses
@@ -150,11 +164,14 @@ def computer_guess_word(ui, chosen_category, user_starting_letter, used_words):
 
         if user_response == "yes" or user_response == "y":
             ui.output(
-                f"{Colour.green} Hooray, I made the right guess in {str(computer_guesses)} attempt(s) {Colour.end}"
+                f"{Colour.green} Hooray, I made the right guess in "
+                f"{str(computer_guesses)} attempt(s) {Colour.end}"
             )
             return True
 
-    ui.output(f"{Colour.cyan} Apologies, I am unable to guess your word {Colour.end}")
+    ui.output(
+        f"{Colour.cyan} Apologies, I am unable to guess your word {Colour.end}"
+    )
     return False
 
 
@@ -169,24 +186,27 @@ def user_provide_word(ui, user_starting_letter, user_words):
             break
         else:
             ui.output(
-                f"{Colour.red} Your secret word must begin with the letter {user_starting_letter} you specified earlier {Colour.end}"
+                f"{Colour.red} Your secret word must begin with the letter "
+                f"{user_starting_letter} you specified earlier {Colour.end}"
             )
 
 
 # main function to control the user's turn
 def user_play(ui, category_name, chosen_category, user_words=[]):
-    # user_words list is for words the computer fails to guess and are provided by the user
-    # if the user continues to play, this list of words should be available and appended to
+    # user_words are provided by the user
+    # if the user continues to play, this list of words should be appended to
 
     print()
 
     if category_name != "expert":
         ui.output(
-            f"It is your turn to play. Please type in the first letter of your secret {category_name[:-1]}"
+            f"It is your turn to play. Please type in the first letter "
+            f"of your secret {category_name[:-1]}"
         )
     else:
         ui.output(
-            f"It is your turn to play. Please type in the first letter of your secret object"
+            "It is your turn to play. Please type in the first letter "
+            "of your secret object"
         )
 
     ui.output('Type "yes / y" or "no / n" to my guesses')
@@ -198,7 +218,9 @@ def user_play(ui, category_name, chosen_category, user_words=[]):
     used_words = []
 
     # this is a Boolean
-    success = computer_guess_word(ui, chosen_category, user_starting_letter, used_words)
+    success = computer_guess_word(
+        ui, chosen_category, user_starting_letter, used_words
+    )
     if not success:
         user_provide_word(ui, user_starting_letter, user_words)
     else:
