@@ -58,7 +58,7 @@ def test_choose_category_incorrect_category(test_data, capsys):
         chosen_category, category_name = play.choose_category(ui)
 
         # no category is expected
-        assert chosen_category == None
+        assert chosen_category is None
 
         # verify that exception was raised, function exception raised
         # if exception in test is raised
@@ -177,6 +177,7 @@ def test_get_user_starting_letter_few_unavailable_keys(test_data):
             ui, chosen_category
         )
 
+        assert user_starting_letter is None
         assert (
             "My database does not have words that begin with" in ui.outputs[0]
         )
@@ -191,6 +192,7 @@ def test_get_user_starting_letter_many_unavailable_keys(test_data):
 
     user_starting_letter = play.get_user_starting_letter(ui, chosen_category)
 
+    assert user_starting_letter is None
     assert "My database does not have words that begin with" in ui.outputs[0]
     assert "Please choose another letter" in ui.outputs[1]
 
@@ -248,7 +250,7 @@ def test_computer_guess_word(
         ui, chosen_category, user_starting_letter, used_words
     )
 
-    if success == True:
+    if success is True:
         assert "Is your secret word" in ui.outputs[0]
         assert "Hooray, I made the right guess in" in ui.outputs[1]
     else:
@@ -268,7 +270,7 @@ def test_computer_guess_word_many_guesses(test_data):
         ui, chosen_category, user_starting_letter, used_words
     )
 
-    assert success == False
+    assert success is False
     assert "Is your secret word" in ui.outputs[0]
     assert "Apologies, I am unable to guess your word" in ui.outputs[-1]
 
