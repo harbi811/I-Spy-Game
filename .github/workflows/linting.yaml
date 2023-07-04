@@ -1,0 +1,29 @@
+# for continuous integration and delivery
+# these are github repos 😊 https://github.com/actions
+
+name: flake8 Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  flake8-lint:
+    strategy:
+      fail-fast: true
+    runs-on: ubuntu-latest
+
+    name: Lint
+    steps:
+      - name: check out source repository
+        uses: actions/checkout@v3
+
+      - name: set up Python environment
+        uses: actions/setup-python@v4
+
+      - name: linting with flake8
+        uses: py-actions/flake8@v2

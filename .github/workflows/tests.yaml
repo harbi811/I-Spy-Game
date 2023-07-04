@@ -1,0 +1,26 @@
+name: tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  tests:
+    strategy:
+      fail-fast: true
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source repository
+        uses: actions/checkout@v3
+
+      - name: install pytest
+        run: pip3 install pytest
+
+      - name: setup python environment
+        uses: actions/setup-python@v4
+
+      - name: running tests
+        run: pytest test_play.py
