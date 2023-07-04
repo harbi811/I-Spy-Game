@@ -10,7 +10,8 @@ sandbox.py
 __pycache__/
 test_pytest_tutorial.py
 .pytest_cache/*
-
+htmlcov/*
+.coverage
 
 # User-specific files
 *.rsuser
