@@ -4,6 +4,14 @@ import play
 from categories import Categories
 
 
+# defining error class
+class NoMoreInputs(Exception):
+    "Raised when no more inputs are available"
+
+    def __init__(self, message):
+        self.message = message
+
+
 # class for mocking user input and function output
 class MockUserInterface:
     def __init__(self, inputs):
@@ -14,8 +22,7 @@ class MockUserInterface:
         if len(self.inputs) > 0:
             return self.inputs.pop()
         else:
-            raise ValueError("No more inputs provided.")
-            # self.outputs.append(message)
+            raise NoMoreInputs("No more inputs provided")
 
     def output(self, message=None):
         self.outputs.append(message)
@@ -47,7 +54,7 @@ def test_choose_category_incorrect_category(test_data, capsys):
     ui = MockUserInterface(inputs=["bananas"])
 
     # asserting Exceptions
-    with pytest.raises(ValueError) as exception_info:
+    with pytest.raises(NoMoreInputs) as exception_info:
         chosen_category, category_name = play.choose_category(ui)
 
         # no category is expected
@@ -59,7 +66,7 @@ def test_choose_category_incorrect_category(test_data, capsys):
         assert "Please choose one of these categories" in ui.output[0]
         assert "Enter the name of your category" in ui.output[0]
 
-    assert exception_info.type == ValueError
+    assert exception_info.type == NoMoreInputs
     assert "No more inputs provided" in str(exception_info.value)
 
 
@@ -108,7 +115,7 @@ def test_computer_play_few_incorrect_guesses(test_data):
     secret_word = "banana"
     category_name = "fruits"
 
-    with pytest.raises(ValueError) as exception_info:
+    with pytest.raises(NoMoreInputs) as exception_info:
         play.computer_play(
             ui, category_name, chosen_category, secret_letter, secret_word
         )
@@ -120,7 +127,7 @@ def test_computer_play_few_incorrect_guesses(test_data):
         f"I spy with my little eye a(n) {category_name[:-1]} that begins with the letter {secret_letter}"
         in ui.outputs[0]
     )
-    assert exception_info.type == ValueError
+    assert exception_info.type == NoMoreInputs
     assert "No more inputs provided" in str(exception_info.value)
 
 
@@ -161,12 +168,12 @@ def test_get_user_starting_letter_few_unavailable_keys(test_data):
     ui = MockUserInterface(inputs=["x", "x"])
     chosen_category = test_data
 
-    with pytest.raises(ValueError) as exception_info:
+    with pytest.raises(NoMoreInputs) as exception_info:
         user_starting_letter = play.get_user_starting_letter(ui, chosen_category)
 
         assert f"My database does not have words that begin with" in ui.outputs[0]
         assert "Please choose another letter" in ui.outputs[0]
-    assert exception_info.type == ValueError
+    assert exception_info.type == NoMoreInputs
     assert "No more inputs provided" in str(exception_info.value)
 
 
